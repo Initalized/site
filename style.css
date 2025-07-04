@@ -382,3 +382,21 @@ a.glitch-link,
 .link_p:hover .button_p {
     color: var(--project-hover);
 }
+
+.firefox {
+    position: absolute;
+    top: 22px;
+    right: 0;
+    width: 190px;
+    height: 60px;
+    background-color: var(--project-hover);
+    border: solid 1px var(--project-border);
+    border-right: none;
+    color: #fff;
+    z-index: 10000;
+
+    display: flex;
+    justify-content: center; /* center horizontally */
+    align-items: center;     /* center vertically */
+    text-align: center;      /* optional: center multiline text */
+}

@@ -150,28 +150,34 @@ video.addEventListener('canplay', () => {
   renderCharacter();
 });
 
-function renderCharacter() {
+let frameCounter = 0;
+let processedFrame = null;
+
+function updateMaskedFrame() {
   const w = offCanvas.width;
   const h = offCanvas.height;
 
   offCtx.drawImage(video, 0, 0, w, h);
-  const frame = offCtx.getImageData(0, 0, w, h);
-  const data = frame.data;
+  processedFrame = offCtx.getImageData(0, 0, w, h);
+  const data = processedFrame.data;
+
   for (let i = 0; i < data.length; i += 4) {
     const r = data[i], g = data[i + 1], b = data[i + 2];
     if (r < 30 && g < 30 && b < 30) data[i + 3] = 0;
   }
-  tempCtx.putImageData(frame, 0, 0);
 
-  maskCtx.clearRect(0, 0, w, h);
-  maskCtx.drawImage(tempCanvas, 0, 0);
+  tempCtx.putImageData(processedFrame, 0, 0);
+}
 
-  outlineCtx.clearRect(0, 0, w, h);
-  outlineCtx.drawImage(maskCanvas, 0, 0);
-  outlineCtx.globalCompositeOperation = 'source-in';
-  outlineCtx.fillStyle = 'white';
-  outlineCtx.fillRect(0, 0, w, h);
-  outlineCtx.globalCompositeOperation = 'source-over';
+function renderCharacter() {
+  const w = offCanvas.width;
+  const h = offCanvas.height;
+
+  // Only update the frame every 2nd frame to reduce CPU
+  if (frameCounter % 2 === 0) {
+    updateMaskedFrame();
+  }
+  frameCounter++;
 
   charCtx.clearRect(0, 0, charCanvas.width, charCanvas.height);
 
@@ -181,10 +187,10 @@ function renderCharacter() {
   const x = 0;
   const y = window.innerHeight - targetHeight;
 
-  charCtx.drawImage(outlineCanvas, x - 4, y - 4, targetWidth + 8, targetHeight + 8);
+  // Skip outline/mask canvas for now
   charCtx.drawImage(tempCanvas, x, y, targetWidth, targetHeight);
 
-  // Draw coffee bottom right
+  // Coffee rendering
   const drawWidth = 50;
   const drawHeight = 50;
   const padding = 4;
@@ -192,13 +198,9 @@ function renderCharacter() {
   const cy = window.innerHeight - drawHeight - padding;
   charCtx.drawImage(coffeeCanvas, cx, cy, drawWidth, drawHeight);
 
-  // ☕ Hover detection for coffee
   const mx = currentMousePos.x;
   const my = currentMousePos.y;
-  if (
-    mx >= cx && mx <= cx + drawWidth &&
-    my >= cy && my <= cy + drawHeight
-  ) {
+  if (mx >= cx && mx <= cx + drawWidth && my >= cy && my <= cy + drawHeight) {
     coffeeTooltip.style.left = `${mx + 10}px`;
     coffeeTooltip.style.top = `${my + 10}px`;
     coffeeTooltip.style.display = 'block';
@@ -447,3 +449,13 @@ if (githubElement) {
 function visit(url) {
     window.open(url, '_blank');
 }
+
+const isFirefox = typeof InstallTrigger !== 'undefined';
+
+  // Get the #firefox element
+  const firefoxDiv = document.getElementById('firefox');
+
+  // Remove the element if the browser is Firefox
+  if (isFirefox && firefoxDiv) {
+    firefoxDiv.remove();
+  }
