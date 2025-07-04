@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Initialize</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="list">
+        <h1 class="title" id="title">INITIALIZE<span class="cursor">_</span></h1>
+        <p class="contact_li">Contact</p>
+        <p class="archive_li">Archive</p>
+        <p class="github_li" href="https://github.com/Initalized">Github</p>
+    </div>
+
+    <p class="l_text" id="l_text"></p>
+
+    <canvas id="background"></canvas>
+    <canvas id="character"></canvas>
+
+    <div class="projectContainer">
+        <div class="project">
+            <p class="title_p">TCLI</p>
+            <p class="context_p">TCLI is a highly interactive, multi-threaded command-line interface for local and remote directory enumeration, scanning, session management, and more. It is designed for power users, sysadmins, and security testers who need a fast, extensible, and visually rich CLI toolkit.</p>
+            <button class="link_p" onclick="visit('https://github.com/Initalized/tcli')"><p class="button_p">Try it out</p></button>
+        </div>
+    </div>
+
+    <div class="donutBox" style="display: none; opacity: 0; transition: opacity 1s; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <canvas id="donut" width="640" height="480"></canvas>
+    </div>
+
+    <p class="copyright">(c) Copyright 2025 INITIALIZE</p>
+
+    <script src="script.js"></script>
+</body>
+</html>
